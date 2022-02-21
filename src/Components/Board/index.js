@@ -1,16 +1,40 @@
 import React from 'react'
 import { Wrapper } from './Board.style'
 const Board = () => {
-  const onDragHandler = e => {
-    console.log('This is dragging')
+  let offset = [0,0];
+  let isDown = false;
+
+  const onMouseDown = (e) => {
+    isDown = true;
+    offset = [
+      e.target.offsetLeft - e.clientX,
+      e.target.offsetTop - e.clientY,
+    ]
+  }
+
+  const onMouseUp = (e) => {
+    isDown = false;
+  }
+
+  const onMouseMove = (e) => {
+    e.preventDefault()
+    const box = e.currentTarget.querySelector('.box')
+
+    if(isDown) {
+      box.style.left = `${e.clientX + offset[0]}px`
+      box.style.top = `${e.clientY + offset[1]}px`
+    
+    }
   }
   
   return (
-    <Wrapper>
+    <Wrapper
+        onMouseUpCapture={e => onMouseUp(e)}
+        onMouseMoveCapture={e => onMouseMove(e)}
+    >
       <div
-        draggable
         className="box"
-        onDragStart={onDragHandler}
+        onMouseDownCapture={e => onMouseDown(e)}
       ></div>
 
     </Wrapper>

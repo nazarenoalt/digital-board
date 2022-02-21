@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
+import ContextMenu from '../ContextMenu';
 import { Wrapper } from './Board.style'
 const Board = () => {
+  const [activeMenu, setActiveMenu] = useState(false);
+  const [menuPosition, setMenuPosition] = useState([0,0]);
   let offset = [0,0];
   let isDown = false;
 
@@ -26,17 +29,23 @@ const Board = () => {
     
     }
   }
-  
+
+  const onContextMenu = (e) => {
+    e.preventDefault();
+    setMenuPosition([e.pageY, e.pageX])
+    setActiveMenu(true)                                       
+  }
   return (
     <Wrapper
         onMouseUpCapture={e => onMouseUp(e)}
         onMouseMoveCapture={e => onMouseMove(e)}
+        onContextMenu={e => onContextMenu(e)}
     >
       <div
         className="box"
         onMouseDownCapture={e => onMouseDown(e)}
       ></div>
-
+    {activeMenu && <ContextMenu top={menuPosition[0]} left={menuPosition[1]} />}
     </Wrapper>
   )
 }

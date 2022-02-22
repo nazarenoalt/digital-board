@@ -40,6 +40,7 @@ const Board = () => {
         onMouseUpCapture={e => onMouseUp(e)}
         onMouseMoveCapture={e => onMouseMove(e)}
         onContextMenu={e => onContextMenu(e)}
+        onClick={() => activeMenu && setActiveMenu(false)}
     >
       <div
         className="box"

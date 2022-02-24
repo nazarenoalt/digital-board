@@ -5,17 +5,20 @@ const Board = () => {
   const [activeMenu, setActiveMenu] = useState(false);
   const [menuPosition, setMenuPosition] = useState([0,0]);
   const [elementsArray, setElementsArray] = useState([
-    { id:1, type:"text", content:"element one", color:"black" }
+    { id:1, type:"text", content:"element one", color:"black", fontSize:16, fontWeight:"regular" }
   ])
+  const [selectedItem, setSelectedItem] = useState(0)
 
   let offset = [0,0];
   let isDown = false;
 
   const onMouseDown = (e) => {
+    const itemId = e.currentTarget.getAttribute("id");
+    setSelectedItem(itemId);
     isDown = true;
     offset = [
-      e.target.offsetLeft - e.clientX,
-      e.target.offsetTop - e.clientY,
+      e.currentTarget.offsetLeft - e.clientX,
+      e.currentTarget.offsetTop - e.clientY,
     ]
   }
 
@@ -25,9 +28,9 @@ const Board = () => {
 
   const onMouseMove = (e) => {
     e.preventDefault()
-    const box = e.currentTarget.querySelector('.box')
-
     if(isDown) {
+      const box = e.target.querySelector(`#${selectedItem}`)
+      console.log(box)
       box.style.left = `${e.clientX + offset[0]}px`
       box.style.top = `${e.clientY + offset[1]}px`
     }
@@ -48,17 +51,24 @@ const Board = () => {
         onClick={() => activeMenu && setActiveMenu(false)}
     >
       {elementsArray.map(element => {
-        console.log(element.type)
         return (
-          <div>
+          <div
+             onMouseDownCapture={e => onMouseDown(e)}
+            id={"id" + element.id}
+            key={element.id}
+          >
             {element.type === "text" && <p>{element.content}</p>}
+            {element.type === "rectangle" && <div 
+             
+              style={{
+                position: "absolute",
+                width:`${element.width}px`,
+                height: `${element.height}px`,
+                border: `${element.weight}px solid ${element.color}`,
+                }}>{element.content}</div>}
           </div>
         )
       })}
-      <div
-        className="box"
-        onMouseDownCapture={e => onMouseDown(e)}
-      ></div>
     {activeMenu && <ContextMenu
       top={menuPosition[0]}
       left={menuPosition[1]}

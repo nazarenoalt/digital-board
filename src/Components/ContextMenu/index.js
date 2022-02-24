@@ -10,14 +10,40 @@ const ContextMenu = ({
 
   const handleElementsArray = (e) => {
     setElementsArray(prevState => {
-      console.log(prevState)
-      const newObject = {
-        type: e.target.getAttribute("type"),
-        id: Math.floor(Math.random() * 10000),
-        color: "black",
-        fontSize: 16,
-        background: "none"
+      const type = e.target.getAttribute("type");
+      let newObject;
+      if(type === "text") {
+        newObject = {
+          type: type,
+          id: Math.floor(Math.random() * 10000),
+          content:"insert text",
+          color: "black",
+          fontSize: 16,
+          background: "none"
+        }
+      } if(type === "rectangle") {
+        newObject = {
+          type: type,
+          id: Math.floor(Math.random() * 10000),
+          color: "black",
+          background: "none",
+          width:100,
+          height:100,
+          weight: 2,
+        }
+      } if(type === "circle") {
+        newObject = {
+          type: type,
+          id: Math.floor(Math.random() * 10000),
+          color: "black",
+          background: "none",
+          width:100,
+          height:100,
+          weight: 2,
+          borderRadius: true,
+        }
       }
+
       return [
         ...prevState,
         newObject,
